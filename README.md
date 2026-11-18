@@ -1,1 +1,1 @@
-# Infinite-Gomoku
+# Infinite Gomoku
