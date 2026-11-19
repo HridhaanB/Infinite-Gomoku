@@ -16,7 +16,7 @@ window.addEventListener('keyup', (event) => {
 });
 
 var placed = new Map();
-var placeable = new Set(["1,0", "1,1", "0,1", "-1,1", "-1,0", "-1,-1", "0,-1", "1,-1"]);
+var placeable = new Set(["10,5"]);
 var turn = "o";
 const neighRay = [];
 for (let i=-4; i<1; i++) {
@@ -25,7 +25,6 @@ for (let i=-4; i<1; i++) {
   neighRay.push([[i,i], [i+1,i+1], [i+2,i+2], [i+3,i+3], [i+4,i+4]]);
   neighRay.push([[i,-i], [i+1,-i-1], [i+2,-i-2], [i+3,-i-3], [i+4,-i-4]]);
 }
-placed.set("0,0",'x');
 
 function placeChar(c, x, y) {
   const pos = x + "," + y;
@@ -85,6 +84,7 @@ function renderBoard() {
 function updateClick(Cx, Cy) {
   let xpos = Math.floor(Cx/tileSize);
   let ypos = Math.floor(Cy/tileSize);
+  if (!placeable.has(xpos + "," + ypos)) {return;}
   if (turn=="x") {
     turn = "o";
     ctx.fillStyle = "#FF0000";
@@ -95,6 +95,13 @@ function updateClick(Cx, Cy) {
   ctx.fillRect(xpos*tileSize+0.5,ypos*tileSize+0.5,tileSize,tileSize);
   ctx.strokeRect(xpos*tileSize+0.5,ypos*tileSize+0.5,tileSize,tileSize);
   if (placeChar(turn, xpos, ypos)) {alert("The winner is " + turn);}
+  ctx.fillStyle = "#B0B0B0";
+  for (const neigh of neighbors(xpos,ypos)) {
+    if (placeable.has(neigh[0] + "," + neigh[1])) {
+      ctx.fillRect(neigh[0]*tileSize+0.5,neigh[1]*tileSize+0.5,tileSize,tileSize);
+      ctx.strokeRect(neigh[0]*tileSize+0.5,neigh[1]*tileSize+0.5,tileSize,tileSize);
+    }
+  }
 }
 
 renderBoard();
